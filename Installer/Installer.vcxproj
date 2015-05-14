@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F66745FF-A5AE-4414-8315-5F5AD91F9BA9}</ProjectGuid>
+    <RootNamespace>Installer</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <CustomBuild>
+      <Command>$(SolutionDir)\buildAll.bat</Command>
+    </CustomBuild>
+    <PreBuildEvent>
+      <Command>buildAll.bat $(PlatformShortName)</Command>
+      <Message>Build installer package for architecture: $(PlatformShortName)</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Command>buildAll.bat $(PlatformShortName)</Command>
+      <Message>Build installer package for architecture: $(PlatformShortName)</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="buildAll.bat" />
+    <None Include="cert\PersoSim_Development_Certificate.p12" />
+    <None Include="cert\PersoSim_Root_CA.cer" />
+    <None Include="input\no_arch\GPLv3.rtf" />
+    <None Include="input\no_arch\persoSim_201401131045.jar" />
+    <None Include="input\no_arch\VirtualPerso.exe" />
+    <None Include="input\Win_7_8_x64\DevMsi.dll" />
+    <None Include="input\Win_7_8_x64\installer.exe" />
+    <None Include="input\Win_7_8_x64\PersoSimVirtualReader.dll" />
+    <None Include="input\Win_7_8_x64\PersoSimVirtualReader.inf" />
+    <None Include="input\Win_7_8_x64\WdfCoInstaller01009.dll" />
+    <None Include="input\Win_7_8_x64\WudfUpdate_01009.dll" />
+    <None Include="input\Win_7_8_x86\DevMsi.dll" />
+    <None Include="input\Win_7_8_x86\installer.exe" />
+    <None Include="input\Win_7_8_x86\PersoSimVirtualReader.dll" />
+    <None Include="input\Win_7_8_x86\PersoSimVirtualReader.inf" />
+    <None Include="input\Win_7_8_x86\WdfCoInstaller01009.dll" />
+    <None Include="input\Win_7_8_x86\WudfUpdate_01009.dll" />
+    <None Include="WiX_Certificate\buildMSI.bat" />
+    <None Include="WiX_Certificate\Certificates.wxs" />
+    <None Include="WiX_Driver\buildMSI.bat" />
+    <None Include="WiX_Driver\catgen.bat" />
+    <None Include="WiX_Driver\Driver.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="input\no_arch\banner_493x58.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="input\no_arch\gpl-3.0.txt" />
+    <Text Include="input\no_arch\ReadMe_PersoSim.txt" />
+    <Text Include="input\no_arch\ReadMe_Simulator.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

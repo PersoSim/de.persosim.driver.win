@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="buildAll.bat" />
+    <None Include="WiX_Driver\buildMSI.bat" />
+    <None Include="WiX_Driver\catgen.bat" />
+    <None Include="WiX_Driver\Driver.wxs" />
+    <None Include="WiX_Certificate\buildMSI.bat" />
+    <None Include="WiX_Certificate\Certificates.wxs" />
+    <None Include="input\no_arch\GPLv3.rtf" />
+    <None Include="input\no_arch\persoSim_201401131045.jar" />
+    <None Include="input\no_arch\VirtualPerso.exe" />
+    <None Include="input\Win_7_8_x64\DevMsi.dll" />
+    <None Include="input\Win_7_8_x64\installer.exe" />
+    <None Include="input\Win_7_8_x64\PersoSimVirtualReader.dll" />
+    <None Include="input\Win_7_8_x64\PersoSimVirtualReader.inf" />
+    <None Include="input\Win_7_8_x64\WdfCoInstaller01009.dll" />
+    <None Include="input\Win_7_8_x64\WudfUpdate_01009.dll" />
+    <None Include="input\Win_7_8_x86\DevMsi.dll" />
+    <None Include="input\Win_7_8_x86\installer.exe" />
+    <None Include="input\Win_7_8_x86\PersoSimVirtualReader.dll" />
+    <None Include="input\Win_7_8_x86\PersoSimVirtualReader.inf" />
+    <None Include="input\Win_7_8_x86\WdfCoInstaller01009.dll" />
+    <None Include="input\Win_7_8_x86\WudfUpdate_01009.dll" />
+    <None Include="cert\PersoSim_Development_Certificate.p12" />
+    <None Include="cert\PersoSim_Root_CA.cer" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="input\no_arch\banner_493x58.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="input\no_arch\gpl-3.0.txt" />
+    <Text Include="input\no_arch\ReadMe_PersoSim.txt" />
+    <Text Include="input\no_arch\ReadMe_Simulator.txt" />
+  </ItemGroup>
+</Project>

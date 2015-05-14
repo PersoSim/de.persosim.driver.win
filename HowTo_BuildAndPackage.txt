@@ -1,0 +1,36 @@
+Windows-Treiber-Entwicklung mit Visual Studio Express:
+
+	Grundvorraussetzungen:
+
+	Windows 7 SP1
+	Visual Studio Express 2013
+	Windows Driver Kit 7.1.0 (Installiert in C:/WinDDK)
+	Windows Driver Kit 8.1 (Installiert nach Visual Studio)
+	WIX 3.8
+
+	Vorgehen für Quellcode aus dem de.persosim.driver.win Repo:
+
+	1. Öffnen der PersoSimDriverWin.sln in Visual Studio
+	2. Hinzufügen des DDK 7.1.0
+		1. Rechtsklick auf das PersoSimVirtualReader Projekt und öffnen der Properties
+		2. Configuration auf "All Configurations" und Platform auf "All Platforms" setzen
+		3. Pfad "C:\WinDDK\7600.16385.1\inc\atl71" zu den "Additional Include Directories" unter "C/C++ -> General" hinzufügen
+		4. Warnungen zulassen durch Auswahl von "NO" für "Treat Linker Warning As Errors" unter "Linker -> General"
+		5. Platform auf "x64" setzen
+		6. Pfad "C:\WinDDK\7600.16385.1\lib\ATL\amd64" zu den "Additional Library Directories" unter "Linker -> General" hinzufügen
+		7. Platform auf "Win32" setzen
+		8. Pfad "C:\WinDDK\7600.16385.1\lib\ATL\i386" zu den "Additional Library Directories" unter "Linker -> General" hinzufügen
+	3. Wiederherstellen des Batch Build in VS Express
+		1. Tools -> Customize Fenster öffnen
+		2. Tab Commands wählen
+		3. Radiobutton für "Toolbar" auswählen und Dropdown-Box auf "Build" stellen
+		4. "Batch Build..." als Command hinzufügen
+	4. Erstellen des Treiberpakets (per Script)
+		1. Kopieren der gebauten Artefakte (Treiber DLL etc.) nach Installer\Input (falls noch nicht aktuell)
+		2. Kommandozeile öffnen und zu "de.persosim.driver.win\Installer" navigieren
+		3. buildAll.bat ausführen
+	5. Erstellen des Treiberpakets (in Visual Studio)
+		1. Batch Build mit allen Release-Konfigurationen ausführen (2* Treiber [jeweils für x64 und x64], 2* Installer)
+		2. Die erstellten MSI-Pakete finden sich im "Installer/WiX_Driver/output/<Plattform>" Verzeichnis
+		
+		Für einzelne Platformen kann ein MSI-Paket erstellt werden indem ein Rebuild der ganzen Solution durchgeführt wird. Dabei wird automatisch der Installer erzeugt.

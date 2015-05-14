@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?define ProductVersion = "0.5.0"?>
+<?define ProductUpgradeCode = "EE2511C1-75A7-4954-8AB6-0E405C9481B4" ?>
+
+<?if $(sys.BUILDARCH)="x86" And $(var.System)="Win_7_8"?>
+	<?define PlatformProgramFilesFolder="ProgramFilesFolder"?>
+	<?define InputFolder="workspace\Win_7_8_x86\"?>
+
+<?elseif $(sys.BUILDARCH)="x64" And $(var.System)="Win_7_8"?>
+	<?define PlatformProgramFilesFolder="ProgramFiles64Folder"?>
+	<?define InputFolder="workspace\Win_7_8_x64\"?>
+<?endif ?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:difx="http://schemas.microsoft.com/wix/DifxAppExtension" xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+    <Product Id="E4099B28-8F3E-11E3-8633-D74774EB0A54" Language="1033" Manufacturer="HJP Consulting" Name="PersoSim Virtual Reader Driver" UpgradeCode="$(var.ProductUpgradeCode)" Version="$(var.ProductVersion).0">
+		
+		<Package Compressed="yes" InstallerVersion="405" Manufacturer="HJP Consulting" InstallScope="perMachine" InstallPrivileges="elevated"/>
+        <Property Id="ARPNOREPAIR" Value="yes" Secure="yes" /> 
+        <Media Id="1" Cabinet="persosim.cab" EmbedCab="yes" />
+		<WixVariable Id="WixUILicenseRtf" Value="..\input\no_arch\GPLv3.rtf" />
+		<WixVariable Id="WixUIBannerBmp" Value="..\input\no_arch\banner_493x58.bmp" />
+		<!--<WixVariable Id="WixUIDialogBmp" Value="..\input\no_arch\banner_493x312.bmp" />-->
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="$(var.PlatformProgramFilesFolder)">
+                <Directory Id="INSTALLDIR" Name="PersoSim">
+                    <Directory Id="DriverDir" Name="Driver">
+                        <Component Id="PersoSim" Guid="d69e6f78-db6d-40aa-a3f0-fd3c6150580c">
+                            <File Id="PersoSimVirtualReader.inf" Name="PersoSimVirtualReader.inf" DiskId="1" Source="$(var.InputFolder)PersoSimVirtualReader.inf" />
+                            <File Id="PersoSimVirtualReader.dll" Name="PersoSimVirtualReader.dll" DiskId="1" Source="$(var.InputFolder)PersoSimVirtualReader.dll" KeyPath="yes" />
+                            <File Id="WudfUpdate_01009.dll" Name="WudfUpdate_01009.dll" DiskId="1" Source="$(var.InputFolder)WudfUpdate_01009.dll" />
+                            <File Id="wudf.cat" Name="WUDF.cat" DiskId="1" Source="$(var.InputFolder)wudf.cat" />
+                            <File Id="WdfCoInstaller01009.dll" Name="WdfCoInstaller01009.dll" DiskId="1" Source="$(var.InputFolder)WdfCoInstaller01009.dll" />
+                            <difx:Driver AddRemovePrograms="no" Legacy="no" PlugAndPlayPrompt="no" Sequence="1" />
+                        </Component>
+						<Component Id="ServiceStart" Guid="">
+							<RegistryValue Root="HKLM" Key="SYSTEM\CurrentControlSet\services\SCardSvr" Name="Start" Type="integer" Value="2" />
+						</Component>
+                    </Directory>
+                </Directory>
+            </Directory>
+        </Directory>
+        <UIRef Id="WixUI_Minimal" />
+        
+        <Feature Id="DriverFeature" Title="Virtual Reader Driver" Level="1">
+            <ComponentRef Id="PersoSim" />
+            <ComponentRef Id="ServiceStart" />
+        </Feature>
+		
+		<Binary Id="DevMsi" SourceFile="$(var.InputFolder)DevMsi.dll" /> 
+    
+		<CustomAction Id="AddDevice" BinaryKey="DevMsi" DllEntry="CreateDevnode" Execute="deferred" Impersonate="no" />
+		<CustomAction Id="DelDevice" Return="ignore" BinaryKey="DevMsi" DllEntry="RemoveDevnode" Execute="deferred" Impersonate="no" />
+		
+		<CustomAction Id="AddDevice.SetParam" Return="check" Property="AddDevice" Value='"[DriverDir]PersoSimVirtualReader.inf" root\PersoSimVirtualReader' />
+		<CustomAction Id="DelDevice.SetParam" Return="check" Property="DelDevice" Value="root\PersoSimVirtualReader" />
+		
+        <InstallExecuteSequence>
+            <RemoveExistingProducts After="InstallInitialize" />
+
+			<Custom Action ="AddDevice.SetParam" After="InstallFiles">NOT Installed</Custom>
+			<Custom Action='AddDevice' After="AddDevice.SetParam">NOT Installed</Custom>
+  
+			<Custom Action ="DelDevice.SetParam" After="AddDevice">Installed</Custom>
+			<Custom Action='DelDevice' After="DelDevice.SetParam">Installed</Custom>
+            <ScheduleReboot Overridable="yes" After="InstallFinalize"/>			
+        </InstallExecuteSequence>
+
+		<Condition Message="64-bit operating system was detected, please use the 64-bit installer.">
+			<?if $(sys.BUILDARCH)="x64" ?>
+				VersionNT64
+			<?else?>
+				NOT VersionNT64
+			<?endif?>
+		</Condition>
+		
+		<Condition Message="This driver requires Windows 7 or newer.">
+			<?if $(sys.BUILDARCH)="x64" ?>
+				VersionNT64 >= 601
+			<?else?>
+				VersionNT >= 601
+			<?endif?>
+		</Condition>
+    </Product>
+</Wix>

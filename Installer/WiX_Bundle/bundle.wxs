@@ -1,0 +1,29 @@
+<?define ProductVersion = "0.5.0"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+  <Bundle
+    Name="PersoSim Virtual Reader"
+	Version="$(var.ProductVersion).0"
+	Manufacturer="HJP Consulting"
+	UpgradeCode="2a9f4411-35be-4fe4-aa49-22cb486bd0a0"
+	Copyright="HJP Consulting"
+	AboutUrl="http://persosim.de"
+	DisableModify="yes">
+    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLargeLicense">
+      <bal:WixStandardBootstrapperApplication
+	  LicenseFile="..\input\no_arch\GPLv3.rtf"
+	  LogoFile="..\input\no_arch\icon_58.bmp"
+	  ShowVersion="yes"
+	  SuppressOptionsUI="yes"
+	  SuppressRepair="yes"/>
+	</BootstrapperApplicationRef>
+    <Chain>
+      <MsiPackage SuppressSignatureVerification="yes" Id="CertificatePackage" SourceFile="../WiX_Certificate/output/PersoSim_Test_Certificates.msi" Vital="yes" />
+
+      <RollbackBoundary />
+
+      <MsiPackage InstallCondition="NOT VersionNT64" SuppressSignatureVerification="yes" Id="MainPackageX86" SourceFile="../WiX_Driver/output/PersoSim_Win_7_8_x86.msi" Vital="yes" />
+      <MsiPackage InstallCondition="VersionNT64" SuppressSignatureVerification="yes" Id="MainPackageX64" SourceFile="../WiX_Driver/output/PersoSim_Win_7_8_x64.msi" Vital="yes" />
+    </Chain>
+  </Bundle>
+</Wix>
